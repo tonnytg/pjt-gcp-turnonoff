@@ -29,10 +29,10 @@ InstanceList() {
 # Turn On/Off Instance
 InstanceAct() {
     InstanceList
-    echo "Do you want $ACTION all instances? (Y/N)"
+    echo "Do you want ${ACTION} all instances? (Y/N)"
     read ANS
     if [ $ANS == "Y" ]; then
-        gcloud compute instances $ACTION $(gcloud compute instances list --filter='labels.job:'${LABEL} | cut -d" " -f1 | grep -v NAME) --zone="us-central1-a"
+        gcloud compute instances ${ACTION} $(gcloud compute instances list --filter='labels.job:'${LABEL} | cut -d" " -f1 | grep -v NAME) --zone=${ZONE}
     fi
 }
 
@@ -41,17 +41,17 @@ read ZONE
 
 echo "What do you want On or Off? (On/Off)"
 read ACAO
-if [ $ACAO == "On" ];
+if [ ${ACAO} == "On" ];
 then
     ACTION="start"
 fi
-if [ $ACAO == "Off" ];
+if [ ${ACAO} == "Off" ];
 then
     ACTION="stop"
 fi
 
 Menu # Show the Menu
-case $OP in
+case ${OP} in
     "12x5")
         export LABEL="12x5"
         InstanceAct
@@ -61,6 +61,7 @@ case $OP in
         InstanceAct
     ;;
     "All")
-        gcloud compute instances $ACTION --filter=labels:*
+        gcloud compute instances ${ACTION} --filter=labels:*
+        echo "I don't On/Off all instances, you need to run this manually!"
     ;;
 esac
